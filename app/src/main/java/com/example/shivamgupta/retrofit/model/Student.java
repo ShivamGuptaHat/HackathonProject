@@ -1,6 +1,6 @@
 package com.example.shivamgupta.retrofit.model;
 
-public class Student {
+public class Student{
 
     private String name;
     private String address;

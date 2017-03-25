@@ -16,29 +16,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <EditText
+        android:id="@+id/yearText"
+        android:hint="Year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textDetail"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="35dp" />
+
     <TextView
         android:id="@+id/textDetail"
-        android:layout_below="@id/getDataBtn"
-        android:text="Details"
+        android:hint="details"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:textSize="25dp"
-        />
-
-    <EditText
-        android:layout_below="@id/textDetail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Insert Data Here"
-        android:id="@+id/editName"
-        />
-
-    <Button
-
-        android:layout_below="@id/editName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/setDataBtn"
-        android:text="Insert"/>
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/getDataBtn"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

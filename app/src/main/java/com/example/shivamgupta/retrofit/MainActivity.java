@@ -8,11 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.example.shivamgupta.retrofit.model.Student;
+import com.example.shivamgupta.retrofit.model.RootObject;
 import com.example.shivamgupta.retrofit.service.APIService;
 import java.util.List;
-import java.util.Scanner;
-
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.GsonConverterFactory;
@@ -23,8 +21,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button getDataBtn;
     TextView textDetails;
-    EditText editName;
-    Button setDataBtn;
+    EditText yearText;
+    //Button setDataBtn;
     ProgressDialog progressDialog;
 
     @Override
@@ -33,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getDataBtn = (Button)findViewById(R.id.getDataBtn);
         textDetails = (TextView) findViewById(R.id.textDetail);
-        editName = (EditText) findViewById(R.id.editName);
-        setDataBtn = (Button) findViewById(R.id.setDataBtn);
+        yearText = (EditText)findViewById(R.id.yearText);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please wait...");
         progressDialog.setCancelable(false);
+
 
         getDataBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,68 +43,34 @@ public class MainActivity extends AppCompatActivity {
                 getPeopleDetails();
             }
         });
-
-        setDataBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setStudentDetails();
-            }
-        });
-    }
-
-    private void setStudentDetails(){
-        showProgressDialog();
-        try {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-
-            APIService service = retrofit.create(APIService.class);
-            Student student = new Student();
-            Scanner kb = new Scanner(editName.getText().toString());
-            student.setName(kb.next());
-            student.setAddress(kb.next());
-            student.setMobile(Integer.parseInt(kb.next()));
-
-            Call<Student> call = service.insertStudentInfo(student.getName(), student.getAddress(), student.getMobile());
-            call.enqueue(new Callback<Student>() {
-                @Override
-                public void onResponse(Response<Student> response, Retrofit retrofit) {
-                    hideProgressDialog();
-                }
-                @Override
-                public void onFailure(Throwable t) {
-                    hideProgressDialog();
-                }
-            });
-
-    }catch(Exception e){
-            e.printStackTrace();
-            Log.d("Error","Connection failed");
-        }
     }
 
     private void getPeopleDetails(){
         showProgressDialog();
         try {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2/")
+                    .baseUrl("http://aicte.comeze.com/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             APIService service = retrofit.create(APIService.class);
-            Call<List<Student>> call = service.getStudentDetails();
-            call.enqueue(new Callback<List<Student>>() {
+            Call<List<RootObject>> call = service.insertStudentInfo(yearText.getText().toString());
+            call.enqueue(new Callback<List<RootObject>>() {
                 @Override
-                public void onResponse(Response<List<Student>> response, Retrofit retrofit) {
-                    List<Student> students = response.body();
+                public void onResponse(Response<List<RootObject>> response, Retrofit retrofit) {
+                    List<RootObject> students = response.body();
                     String details = "";
                     for (int i = 0; i < students.size(); i++) {
-                        String name = students.get(i).getName();
-                        String address = students.get(i).getAddress();
-                        int mobile = students.get(i).getMobile();
-                        details += "\n name: " + name + " adress: " + address + " mobile: " + mobile;
+                        /*String name = students.get(i).getInstituteName();
+                        String affiliated = students.get(i).getAffiliating();
+                        String it = students.get(i).getInstituteType();
+                        details += "\n name: " + name + " affilicated: " + affiliated + " institution types: " + it;*/
+
+                        String aicteId = students.get(i).getAicteId();
+                        String instName = students.get(i).getYear();
+                        String year = students.get(i).getProgram();
+                        details = "\n" + aicteId + " " + instName + " " + year;
+
                     }
                     textDetails.setText(details);
                     hideProgressDialog();
@@ -129,10 +93,10 @@ public class MainActivity extends AppCompatActivity {
             progressDialog.dismiss();
         }
     }
-
     private void showProgressDialog() {
         if(!progressDialog.isShowing()){
             progressDialog.show();
         }
     }
+
 }
